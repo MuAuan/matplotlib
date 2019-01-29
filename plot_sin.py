@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import cv2
 from PIL import Image, ImageDraw
+from images2gif import writeGif
 
 def cv_fourcc(c1, c2, c3, c4):
         return (ord(c1) & 255) + ((ord(c2) & 255) << 8) + \
@@ -35,7 +36,7 @@ x1 = np.linspace(0, 2 * np.pi, 100)
 y1 = np.linspace(0, 2 * np.pi, 100).reshape(-1, 1)
 ims = []
 images=[]
-for a in range(10):
+for a in range(100):
     fig.delaxes(ax1)
     fig.delaxes(ax3)
     ax1 = fig.add_subplot(221)
@@ -52,21 +53,19 @@ for a in range(10):
     ims.append([im])
     im = ax4.pcolormesh(f(x1, y1), cmap='hsv')
     ims.append([im])
-    
-    #ani = animation.ArtistAnimation(fig, ims) #性能悪い
+
     fig1=plt.pause(0.001)
 
     plt.savefig("output/image"+str(a)+".png")
     dst = cv2.imread('output/image'+str(a)+'.png')
     out.write(dst)
-    images.append(dst)
-
+    
 
 import glob
 
 files = sorted(glob.glob('output/*.png'))
 images = list(map(lambda file: Image.open(file), files))
-images[0].save('out.gif', save_all=True, append_images=images[1:], duration=400, loop=0)    
+images[0].save('out.gif', save_all=True, append_images=images[1:], duration=40, loop=0)    
 
 #ani.save('anim.gif', writer="imagemagick")
 #ani.save('anim.mp4', writer="ffmpeg")
